@@ -1,0 +1,15 @@
+{
+  "name": "webcrawler",
+  "version": "1.0.0",
+  "description": "Using JavaScript, I have created a simple web crawler using scraping techniques to extract the first 30 entries from the website https://news.ycombinator.com/.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
