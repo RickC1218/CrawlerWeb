@@ -1,4 +1,4 @@
-const { normalizeUrl } = require('./crawl');
+const { normalizeUrl, getURLs } = require('./crawl');
 const { test, expect } = require('@jest/globals');
 
 // Test 1 - normalizeUrl of protocol
@@ -26,4 +26,63 @@ test('normalizeUrl of protocol http', () => {
 });
 
 
-// Test 4 - main.js with no website provided
+// Test 4 - getURLs absolute
+test('getURLs absolute', () => {
+  const inputHTML = `
+  <html>
+    <body>
+      <a href="https://github.com/RickC1218/WebCrawler">WebCrawler</a>
+    </body>
+  </html>
+  `;
+  const inputURL = 'https://github.com/RickC1218/WebCrawler';
+  const actual = getURLs(inputURL, inputHTML);
+  const expected = ['github.com/RickC1218/WebCrawler']
+  expect(actual).toEqual(expected);
+});
+
+// Test 5 - getURLs relative
+test('getURLs relative', () => {
+  const inputHTML = `
+  <html>
+    <body>
+      <a href="/RickC1218/WebCrawler">WebCrawler</a>
+    </body>
+  </html>
+  `;
+  const inputURL = 'https://github.com/RickC1218/WebCrawler';
+  const actual = getURLs(inputURL, inputHTML);
+  const expected = ['github.com/RickC1218/WebCrawler']
+  expect(actual).toEqual(expected);
+});
+
+// Test 6 - getURLs relative and absolute
+test('getURLs both', () => {
+  const inputHTML = `
+  <html>
+    <body>
+      <a href="/RickC1218/WebCrawler1">WebCrawler1</a>
+      <a href="https://github.com/RickC1218/WebCrawler2">WebCrawler2</a>
+    </body>
+  </html>
+  `;
+  const inputURL = 'https://github.com/RickC1218/WebCrawler';
+  const actual = getURLs(inputURL, inputHTML);
+  const expected = ['github.com/RickC1218/WebCrawler1','github.com/RickC1218/WebCrawler2']
+  expect(actual).toEqual(expected);
+});
+
+// Test 7 - getURLs invalid href
+test('getURLs invalid', () => {
+  const inputHTML = `
+  <html>
+    <body>
+      <a href="RickC1218/WebCrawler">Invalid link</a>
+    </body>
+  </html>
+  `;
+  const inputURL = 'https://github.com/RickC1218/WebCrawler';
+  const actual = getURLs(inputURL, inputHTML);
+  const expected = []
+  expect(actual).toEqual(expected);
+});
