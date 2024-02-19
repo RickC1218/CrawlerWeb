@@ -9,7 +9,11 @@ Using JavaScript, I have created a simple web crawler using scraping techniques 
 The requirements for this project are:
 
 > [!IMPORTANT]
-> The program should be able to extract the following information from the website: Title, Points, Author and Number of comments
+> The program should be able to extract the following information from the website: 
+> - Title
+> - Points
+> - Author
+> - Number of comments
 
 > [!NOTE]
 > For this project, I have to filter all entries with more than five words in the title ordered by the number of comments first.
