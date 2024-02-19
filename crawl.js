@@ -1,49 +1,62 @@
 const { JSDOM } = require('jsdom');
 
-// Normalize URL
-function normalizeUrl(url) {
-  const urlObject = new URL(url);
-  const hostPath = urlObject.host + urlObject.pathname;
-  if (hostPath.endsWith('/')) {
-    return hostPath.substring(0, hostPath.length - 1);
+async function crawl(baseURL, currentURL, pages) {
+
+  const baseURLObject = new URL(baseURL);
+  const currentURLObject = new URL(currentURL);
+  console.log("Crawling", currentURL);
+  if (baseURLObject.hostname !== currentURLObject.hostname) {
+    console.log(`Skipping ${currentURL} because it's not the same domain`);
+    return pages;
   }
-  return hostPath;
+
+  try {
+    const resp = await fetch(currentURL);
+    const contentType = resp.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      const html = await resp.text();
+      const data = getData(html);
+      console.log(`Found ${data.length} links on ${currentURL}`);
+    } else {
+      console.log(`Skipping ${currentURL} because it's not HTML`);
+    }
+    return pages;
+
+  } catch (error) {
+    console.log(`Error fetching ${currentURL}: ${error.message}`);
+  }
 }
 
 // Get urls from a page
-function getURLs(url, html) {
-  const urls = [];
+function getData(html) {
   const dom = new JSDOM(html);
   const document = dom.window.document;
-  const links = document.querySelectorAll('a');
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href) {
-      // If the href is a relative path, we need to convert it to an absolute path
-      if (href.startsWith('/')) {
-        try {
-          const urlObject = new URL(url);
-          const absolutePath = urlObject.protocol + '//' + urlObject.host + href;
-          urls.push(normalizeUrl(absolutePath));
-          return;
-        } catch (error) {
-          console.log('Error parsing relative URL', error.message);
-        }
-      }
-      // If the href is an absolute path, we need to normalize it
-      try {
-        const urlObject = new URL(href);
-        const normalizedUrl = normalizeUrl(urlObject);
-        urls.push(normalizedUrl);
-      } catch (error) {
-        console.log(`Error parsing absolute URL ${error.JSDOM}`, error.message);
-      }
-    }
+
+  const firstElements = document.querySelectorAll(`tbody > .athing`);
+  const commentElements = document.querySelectorAll(`tbody > .subtext > subline`);
+
+  const data = [];
+  const ids = [];
+
+  firstElements.forEach(element => {
+    id = element.getAttribute('id');
+
+    //find the id of the element
+    const index = document.getElementById(id);
+    const rank = index.querySelector(`.title > .rank`) ? index.querySelector(`.title > .rank`).textContent : "0.";
+    const title = index.querySelector(`.title > .titleline > a`) ? index.querySelector(`.title > .titleline > a`).textContent : "No title";
+
+    const points = document.getElementById(`score_${id}`) ? document.getElementById(`score_${id}`).textContent : "0 points";
+
+    const comments = document.querySelector(`.subtext > .subline > a[href = "item?id=${id}" ]`) ? document.querySelector(` .subtext > .subline > a[href = "item?id=${id}"]`).textContent : "0 comments";
+
+    data.push({ id: id, rank: rank, title: title, points: points, comments: comments});
   });
-  return urls;
+  console.log(data);
+  return data;
 }
 
 module.exports = {
-  normalizeUrl,
-  getURLs
+  crawl,
+  getData
 };
