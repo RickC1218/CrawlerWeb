@@ -31,15 +31,19 @@ function printReports(data) {
   const comments = sortByComments(data);
   const points = sortByPoints(data);
 
-  console.log("Filter 1");
-  comments.forEach((item) => {
-    console.log(item);
-  });
+  if (comments.length > 0) {
+    console.log("Filter 1");
+    comments.forEach((item) => {
+      console.log(item);
+    });
+  }
 
-  console.log("Filter 2");
-  points.forEach((item) => {
-    console.log(item);
-  });
+  if (points.length > 0) {
+    console.log("Filter 2");
+    points.forEach((item) => {
+      console.log(item);
+    });
+  }
 }
 
 module.exports = {

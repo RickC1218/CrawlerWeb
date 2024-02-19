@@ -24,12 +24,11 @@ function getData(html) {
   const dom = new JSDOM(html);
   const document = dom.window.document;
 
-  const firstElements = document.querySelectorAll(`tbody > .athing`);
+  const elements = document.querySelectorAll(`tbody > .athing`);
 
   const data = [];
-  const ids = [];
 
-  firstElements.forEach((element) => {
+  elements.forEach((element) => {
     id = element.getAttribute("id");
 
     //find the id of the elements

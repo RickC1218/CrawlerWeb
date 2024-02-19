@@ -1,5 +1,5 @@
-const { crawl } = require("./crawl.js");
-const { printReports } = require("./reports.js");
+const { crawl } = require("./components/crawl.js");
+const { printReports } = require("./components/reports.js");
 
 async function main() {
   if (process.argv.length < 3) {
