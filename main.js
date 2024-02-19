@@ -15,6 +15,7 @@ async function main() {
 
   const items = await crawl(baseURL);
 
+  console.log("Obtain data",items);
   printReports(items);
 }
 

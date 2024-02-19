@@ -40,7 +40,6 @@ describe("getData", () => {
     expect(output).toEqual([
       {
         comments: "39 comments",
-        id: "1",
         points: "137 points",
         rank: "19.",
         title: "This proyect",

@@ -53,7 +53,6 @@ function getData(html) {
       : "0 comments";
 
     data.push({
-      id: id,
       rank: rank,
       title: title,
       points: points,
